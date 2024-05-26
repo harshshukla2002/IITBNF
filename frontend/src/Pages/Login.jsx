@@ -6,6 +6,7 @@ import Toast from "../Components/Toast";
 import axios from "axios";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const intialState = {
   username: "",
@@ -20,6 +21,7 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState("");
 
   const HandleLogin = async () => {
     if (loginData.username === "") {
@@ -34,11 +36,17 @@ const Login = () => {
       setShowToast(true);
       return;
     }
+    if (recaptchaToken === "") {
+      setMessage("recaptcha verfication is required");
+      setStatus("error");
+      setShowToast(true);
+      return;
+    }
     setLoading(true);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}login`,
-        loginData
+        { loginData, recaptchaToken }
       );
       setLoading(false);
       setMessage(response.data.message);
@@ -138,6 +146,10 @@ const Login = () => {
               )}
             </div>
           </div>
+          <ReCAPTCHA
+            sitekey={process.env.REACT_APP_GOOGLE_SITE_KEY}
+            onChange={(value) => setRecaptchaToken(value)}
+          />
         </div>
         <div className="button-wrapper" onClick={HandleLogin}>
           Login

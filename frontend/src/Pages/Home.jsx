@@ -116,7 +116,6 @@ const Home = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response.data);
       setMessage(response.data.message);
       setStatus("success");
       setShowToast(true);

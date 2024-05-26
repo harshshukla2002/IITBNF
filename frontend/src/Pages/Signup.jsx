@@ -6,6 +6,7 @@ import Toast from "../Components/Toast";
 import axios from "axios";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const intialState = {
   email: "",
@@ -24,6 +25,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState("");
 
   const HandleCVChange = async (event) => {
     setLoading(true);
@@ -119,14 +121,23 @@ const Signup = () => {
       setShowToast(true);
       return;
     }
+    if (recaptchaToken === "") {
+      setMessage("recaptcha verfication is required");
+      setStatus("error");
+      setShowToast(true);
+      return;
+    }
     setLoading(true);
     try {
       signupData.status = "pending";
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}signup`,
-        signupData
+        { signupData, recaptchaToken }
       );
-      setMessage(response.data.message);
+
+      console.log(response.data);
+
+      setMessage(response?.data?.message);
       setStatus("success");
       setShowToast(true);
       setLoading(false);
@@ -135,7 +146,8 @@ const Signup = () => {
         navigate("/login");
       }, 2000);
     } catch (error) {
-      setMessage(error.response.data.message);
+      console.error(error);
+      setMessage(error?.response?.data?.message);
       setStatus("error");
       setShowToast(true);
       setLoading(false);
@@ -249,6 +261,10 @@ const Signup = () => {
               onChange={HandleCVChange}
             />
           </div>
+          <ReCAPTCHA
+            sitekey={process.env.REACT_APP_GOOGLE_SITE_KEY}
+            onChange={(value) => setRecaptchaToken(value)}
+          />
         </div>
         <div className="button-wrapper" onClick={HandleSignup}>
           Signup
