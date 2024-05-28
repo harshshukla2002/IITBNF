@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../CSS/login.css";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ const Login = () => {
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState("");
+  const recaptchaRef = useRef(null);
 
   const HandleLogin = async () => {
     if (loginData.username === "") {
@@ -66,11 +67,13 @@ const Login = () => {
           }, 2000);
         }
       }
+      recaptchaRef.current.reset();
     } catch (error) {
       console.log(error);
       setLoading(false);
       setMessage(error.response.data.message);
       setShowToast(true);
+      recaptchaRef.current.reset();
     }
   };
 
@@ -147,6 +150,7 @@ const Login = () => {
             </div>
           </div>
           <ReCAPTCHA
+            ref={recaptchaRef}
             sitekey={process.env.REACT_APP_GOOGLE_SITE_KEY}
             onChange={(value) => setRecaptchaToken(value)}
           />

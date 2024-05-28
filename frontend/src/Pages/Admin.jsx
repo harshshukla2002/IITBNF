@@ -65,6 +65,14 @@ const Admin = () => {
   };
 
   useEffect(() => {
+    const timeoutRef = setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+
+    return () => clearTimeout(timeoutRef);
+  }, [showToast]);
+
+  useEffect(() => {
     const params = {};
 
     if (filterStatus) params.status = filterStatus;

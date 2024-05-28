@@ -15,3 +15,8 @@
 - Main files in <i>index.js</i>
 - Models are seperated
 - live link - https://iitbnf-backend.onrender.com/
+
+### Admin Credentials
+
+<p>username = "harshadmin"</p>
+<p>password = "harsh12"</p>

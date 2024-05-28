@@ -132,6 +132,14 @@ const Home = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    const timeoutRef = setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+
+    return () => clearTimeout(timeoutRef);
+  }, [showToast]);
+
   return (
     <div>
       {showToast && <Toast {...{ message, status }} />}

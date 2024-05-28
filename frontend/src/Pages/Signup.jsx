@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import "../CSS/signup.css";
@@ -26,6 +26,7 @@ const Signup = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
   const [recaptchaToken, setRecaptchaToken] = useState("");
+  const recaptchaRef = useRef(null);
 
   const HandleCVChange = async (event) => {
     setLoading(true);
@@ -145,12 +146,14 @@ const Signup = () => {
       setTimeout(() => {
         navigate("/login");
       }, 2000);
+      recaptchaRef.current.reset();
     } catch (error) {
       console.error(error);
       setMessage(error?.response?.data?.message);
       setStatus("error");
       setShowToast(true);
       setLoading(false);
+      recaptchaRef.current.reset();
     }
   };
 
