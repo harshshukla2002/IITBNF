@@ -80,6 +80,27 @@ const Admin = () => {
     getUsers(params);
   }, [filterStatus]);
 
+  const UpdateUser = async (userId, data) => {
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}update/${userId}`,
+        data,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setMessage(response.data.message);
+      setStatus("success");
+      setShowToast(true);
+      getUsers();
+    } catch (error) {
+      console.error(error);
+      setMessage(error.response.data.message);
+      setStatus("error");
+      setShowToast(true);
+    }
+  };
+
   return (
     <div>
       {showToast && <Toast {...{ message, status }} />}
@@ -112,7 +133,12 @@ const Admin = () => {
       </div>
       <div className="users-wrapper">
         {users.map((user, index) => {
-          return <UserCard key={index} {...{ index, user, HandleAction }} />;
+          return (
+            <UserCard
+              key={index}
+              {...{ index, user, HandleAction, UpdateUser }}
+            />
+          );
         })}
       </div>
     </div>

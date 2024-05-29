@@ -37,7 +37,7 @@ img {
 
 .user-card-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   margin: 10px;
   border-bottom: 1px solid;
@@ -47,13 +47,15 @@ img {
 .user-image {
   width: 10%;
   border-radius: 10px;
+  margin-inline: 60px;
 }
 
 .action-button-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   gap: 10px;
+  margin-right: 70px;
 }
 
 .approve-button {
